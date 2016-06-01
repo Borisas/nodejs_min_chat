@@ -73,6 +73,33 @@
 		var received = new Audio('receive.mp3');
 		var sent = new Audio('send.mp3');
 
+		// request permission on page load
+document.addEventListener('DOMContentLoaded', function () {
+  if (Notification.permission !== "granted")
+    Notification.requestPermission();
+});
+
+function notifyMe(title, text) {
+  if (!Notification) {
+    alert('Desktop notifications not available in your browser. Try Chromium.');
+    return;
+  }
+
+  if (Notification.permission !== "granted")
+    Notification.requestPermission();
+  else {
+    var notification = new Notification(title,
+		{
+      icon: 'https://upload.wikimedia.org/wikipedia/commons/7/72/Message-icon-grey.png',
+      body: text
+    });
+
+	setTimeout(notification.close, 2000);
+
+  }
+
+}
+
 
 		$(document).keypress(function(e) {
 			if(e.which == 13) {
@@ -122,14 +149,16 @@
 			$('.text_box').scrollTop(d.prop("scrollHeight"));
 			if(msg !== my_last_message){
 				received.play();
+
+				notifyMe("New Message", msg);
 				// var n = noty({text: msg});
 			}else{
 				sent.play();
 			}
 		});
 		socket.on('log_con', function(msg){
-			
-			
+
+
 			if(msg != myname){
 				$('.text_box').append($('<div id="text_block" style="color:green;">').text(msg +" connected."));
 				names.push(msg);
@@ -151,7 +180,7 @@
 </head>
 <body>
 	<div class='active'>
-	
+
 	</div>
 	<div class='center_box'>
 		<div class='register_overlay'>
@@ -167,7 +196,7 @@
 			<input type="text" id='f_text'>
 			<button id='f_send' onclick='send_sc()'>Send</button>
 		</div>
-		
+
 	</div>
 
 </body>
