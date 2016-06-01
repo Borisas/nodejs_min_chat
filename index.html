@@ -74,31 +74,34 @@
 		var sent = new Audio('send.mp3');
 
 		// request permission on page load
-document.addEventListener('DOMContentLoaded', function () {
-  if (Notification.permission !== "granted")
-    Notification.requestPermission();
-});
+		document.addEventListener('DOMContentLoaded', function () {
+			if (Notification.permission !== "granted")
+				Notification.requestPermission();
+		});
 
-function notifyMe(title, text) {
-  if (!Notification) {
-    alert('Desktop notifications not available in your browser. Try Chromium.');
-    return;
-  }
+		function notifyMe(title, text) {
+			if (!Notification) {
+				alert('Desktop notifications not available in your browser. Try Chromium.');
+				return;
+			}
 
-  if (Notification.permission !== "granted")
-    Notification.requestPermission();
-  else {
-    var notification = new Notification(title,
-		{
-      icon: 'https://upload.wikimedia.org/wikipedia/commons/7/72/Message-icon-grey.png',
-      body: text
-    });
-
-	setTimeout(notification.close, 2000);
-
-  }
-
-}
+			if (Notification.permission !== "granted")
+				Notification.requestPermission();
+			else {
+				var notification = new Notification(title,
+					{
+					icon: 'msg_not.png',
+					body: text
+					}
+				);
+				setTimeout(close_notification(notification), 2000);
+			}
+		}
+		function close_notification(n){
+			return function(){
+				n.close();
+			};
+		}
 
 
 		$(document).keypress(function(e) {
