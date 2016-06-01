@@ -1,3 +1,6 @@
+//STABLE 1.0
+
+
 //INCLUDES
 var express = require("express");
 var app = express();
