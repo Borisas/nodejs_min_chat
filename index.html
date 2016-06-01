@@ -1,203 +1,41 @@
+
+<!DOCTYPE html>
+
 <html>
-<head>
-	<title>BEAR COMS</title>
-	<style>
-		.center_box{
-			/*position:absoulte;*/
 
-			width:300px;
-			height:300px;
+	<head>
 
-			float:left;
+		<title>BEAR COMMS</title>
+		<link rel="stylesheet" type"text/css" href="style.css"/>
 
-			border: 1px solid black;
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.noty.packaged.min.js"></script>
+		<script type="text/javascript" src="js/client.js"></script>
 
-			overflow:visible;
-			display:block;
-		}
-		.text_box{
-			width:100%;
-			height:90%;
-			overflow-y:scroll;
-		}
-		.input_box{
-			width:100%;
-			height:10%;
-			position:relative;
-		}
-		#f_text{
-			width:100%;
-			height:100%;
-			position:absolute; 
-			font-size:100%;
-			bottom:0px; 
-			/*z-index:-1;*/
-		}
-		#text_block{
-			width:100%;
-			border-bottom: 1px solid black;
-			word-wrap:break-word;
+	</head>
 
-		}
-		.register_overlay{
-			width:inherit;
-			height:inherit;
+	<body>
 
-			position:absolute;
+		<div class='box_active_users'></div>
+		<div class='box_chat'>
 
-			background-color:white;
-			text-align: center;
-			vertical-align: middle;
-			z-index:10;
-		}
-		.active{
-			height:300px;
-			width:150px;
-			border:1px solid black;
-			float:left;
-			overflow-y:scroll;
-			overflow-x: break-word;
-		}
-	</style>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-	<script type="text/javascript" src="js/jquery.noty.packaged.min.js"></script>
-	<script type="text/javascript" src="js/message_processor.js"></script>
-	<script>
-		var socket = io();
-		var myname = '';
-		var connections = [];
-		var my_last_message = '';
-
-		var notification = new Audio('notification.mp3');
-		var received = new Audio('receive.mp3');
-		var sent = new Audio('send.mp3');
-
-		// request permission on page load
-		document.addEventListener('DOMContentLoaded', function () {
-			if (Notification.permission !== "granted")
-				Notification.requestPermission();
-		});
-
-		function notifyMe(title, text) {
-			if (!Notification) {
-				alert('Desktop notifications not available in your browser. Try Chromium.');
-				return;
-			}
-
-			if (Notification.permission !== "granted")
-				Notification.requestPermission();
-			else {
-				var notification = new Notification(title,
-					{
-						icon: 'msg_not.png',
-						body: text
-					}
-				);
-				setTimeout(close_notification(notification), 2000);
-			}
-		}
-		function close_notification(n){
-			return function(){
-				n.close();
-			};
-		}
-
-
-		$(document).keypress(function(e) {
-			if(e.which == 13) {
-				if($("#f_text").is(":focus")){
-					send_sc();
-				}
-				if($('#uname').is(":focus")){
-					setname();
-				}
-			}
-		});
-		$(document).ready(function(){
-			$('#uname').focus();
-		});
-
-		function setname(){
-			myname=$('#uname').val();
-			if(myname !== ""){
-				$('.register_overlay').remove();
-				$('#f_text').focus();
-				socket.emit('register', myname);
-			}
-		}
-		function send_sc(){
-			my_last_message = myname +": "+$('#f_text').val();
-			socket.emit('chat message', my_last_message);
-			$('#f_text').val('');
-			return false;
-		}
-		function loadnames(nm){
-			names = nm;
-			reloadnames();
-		}
-		function reloadnames(){
-			$('.active').empty();
-			for(var i in names){
-				$('.active').append(names[i]+"<br/>");
-			}
-		}
-
-		socket.on('chat message', function(msg){
-			var d = $('.text_box');
-			
-			if(msg !== my_last_message){
-				received.play();
-				notifyMe("New Message", msg);
-			}else{
-				sent.play();
-			}
-			msg = __processmessage(msg);
-			$('.text_box').append($('<div id="text_block">').html(msg));
-			$('.text_box').scrollTop(d.prop("scrollHeight"));
-		});
-		socket.on('log_con', function(msg){
-
-
-			if(msg != myname){
-				$('.text_box').append($('<div id="text_block" style="color:green;">').text(msg +" connected."));
-				names.push(msg);
-				reloadnames();
-				notification.play();
-			}
-		});
-		socket.on('log_dc', function(msg){
-			if(msg != myname){
-				$('.text_box').append($('<div id="text_block" style="color:red;">').text(msg +" disconnected."));
-				names.splice(names.indexOf(msg), 1);
-				reloadnames();
-			}
-		});
-		socket.on('connections', function(msg){
-			loadnames(msg);
-		});
-	</script>
-</head>
-<body>
-	<div class='active'>
-
-	</div>
-	<div class='center_box'>
-		<div class='register_overlay'>
-			<div style='position:relative;height:100; top:100;'>
-				USERNAME:<br/>
-				<input type='text' id='uname'><br/>
-				<button onclick='setname()'>OK</button>
+			<div class='register_overlay'>
+				<div class = 'register_input'>
+					USER NAME</br>
+					<input type='text' id='field_user_name'></br>
+				</div>
 			</div>
-		</div>
-		<div class='text_box'>
-		</div>
-		<div class='input_box' style=''>
-			<input type="text" id='f_text'>
+
+			<div class='box_messages'></div>
+			<div class='box_message_padding'></div>
+			<div class='box_message_input'>
+				<input type="text" id='field_message_input'>
+			</div>
+
 		</div>
 
-	</div>
+	</body>
 
-</body>
 </html>
