@@ -25,9 +25,6 @@ io.on('connection', function(socket) {
     socket.on('chat_message', function(msg) {
 
         console.log(msg);
-        console.log(processMessage(msg));
-        console.log("-- -- -- --");
-
         io.emit('chat_message', processMessage(msg));
 
     });
@@ -77,7 +74,7 @@ io.on('connection', function(socket) {
 
 http.listen(3000, function() {
 
-    console.log('Server started on port: 3000');
+    console.log('Server started.');
 
 });
 
