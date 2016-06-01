@@ -144,10 +144,8 @@
 		}
 
 		socket.on('chat message', function(msg){
-			// var n = noty({text: msg});
-			msg = __processmessage(msg);
-			// consol
-			$('.text_box').append($('<div id="text_block">').html(msg));
+			// msg = __processmessage(msg);
+			// $('.text_box').append($('<div id="text_block">').html(msg));
 			var d = $('.text_box');
 			$('.text_box').scrollTop(d.prop("scrollHeight"));
 			if(msg !== my_last_message){
@@ -158,6 +156,8 @@
 			}else{
 				sent.play();
 			}
+			msg = __processmessage(msg);
+			$('.text_box').append($('<div id="text_block">').html(msg));
 		});
 		socket.on('log_con', function(msg){
 
