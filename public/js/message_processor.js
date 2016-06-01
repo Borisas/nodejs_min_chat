@@ -54,16 +54,16 @@ function __processmessage(msg){
 
 			var __formatted = "";
 			//TRY IMAGE
-			if(__link.indexOf(".jpg") > -1 || __link.indexOf(".gif") > -1 || __link.indexOf(".png") > -1 || __link.indexOf(".bmp") > -1){
+			if(isIMG(__link)){
 				__formatted = "<a href='"+gotolink+"' target='blank'><img src='"+gotolink+"' style='max-width:100px; max-height:100px;'/></a>";
 			}
 			else{
 				__formatted = "<a href='"+gotolink+"' target='_blank'>"+__link+"</a>";
 			}
 			//-----
-
-
-			newmsg = newmsg.replace(__link, __formatted);		
+			if(isURL(__link)){
+				newmsg = newmsg.replace(__link, __formatted);
+			}		
 			last_pos = end;
 			continue;
 		}
@@ -77,3 +77,16 @@ function __processmessage(msg){
 	return newmsg;
 }
 
+//EXT
+function isURL(str) {
+	var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+	'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+	'((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+	'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+	'(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+	'(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+	return pattern.test(str);
+}
+function isIMG(url) {
+    return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+}
