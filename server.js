@@ -23,9 +23,10 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
 
     socket.on('chat_message', function(msg) {
-
+        console.log('message logging---');
         console.log(msg);
-        io.emit('chat_message', processMessage(msg));
+        console.log('------------------');
+        io.emit('chat_message', {user: msg.user, message:processMessage(msg.message)});
 
     });
 
@@ -92,6 +93,7 @@ function processMessage(msg) {
 	var timeout        = 0;
 	var message        = msg;
 
+    // msg = msg.replace(/(?:\r\n|\r|\n)/g, '<br />');
 	while (last_position < msg.length) {
 
 		if(timeout++ > 500) break;
@@ -139,7 +141,7 @@ function processMessage(msg) {
             var g = l;
             var f = "";
 
-            if (start = w) g = "https://" + g;
+            if (start == w) g = "https://" + g;
 
 			// CHECK IF IMAGE
 
@@ -160,7 +162,7 @@ function processMessage(msg) {
 		last_position = msg.length;
 
 	}
-
+    message = message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
     return message;
 
 }
@@ -181,6 +183,6 @@ function isURL(str) {
 
 function isIMG(url) {
 
-    return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+    return(url.match(/\.(jpeg|jpg|gif|png)$/) !== null);
 
 }

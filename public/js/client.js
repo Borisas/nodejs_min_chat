@@ -12,24 +12,23 @@ var msg_sent        = new Audio('send.mp3');
 
 socket.on('chat_message', function(msg) {
 
-    if (msg !== last_message) {
+    if (msg.user !== user_name) {
 
         msg_received.play();
-        pushNotification("New Message", msg);
+        var msg_push = msg.message;
+        msg_push = msg_push.split('<br/>').join('\n');
+        pushNotification("New Message", msg_push);
 
     } else { msg_sent.play(); }
 
-    $('.box_messages').append($('<div id="field_message">').html(msg));
-    $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+    printChatMessage(msg.user,msg.message);
 
 });
 
 socket.on('log_con', function(msg) {
 
     if(msg != user_name) {
-
-        $('.box_messages').append($('<div id="field_message" style="color:green;">').text(msg +" connected."));
-        $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+        printSysMessage(msg+" connected.", "green");
 
         connections.push(msg);
         reloadConnectedUsers();
@@ -41,9 +40,7 @@ socket.on('log_con', function(msg) {
 socket.on('log_dc', function(msg) {
 
     if(msg != user_name) {
-
-        $('.box_messages').append($('<div id="field_message" style="color:red;">').text(msg +" disconnected."));
-        $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+        printSysMessage(msg+" disconnected.", "red");
 
         connections.splice(connections.indexOf(msg), 1);
         reloadConnectedUsers();
@@ -90,12 +87,12 @@ function pushNotification(title, text) {
 // APP
 
 $(document).keypress(function(event) {
-
     if(event.which == 13) {
-
-        if($("#field_message_input").is(":focus"))  sendMessage();
-        if($('#field_user_name').is(":focus"))      setUserName();
-
+        if(!event.shiftKey){
+            event.preventDefault();
+            if($("#field_message_input").is(":focus"))  sendMessage();
+            if($('#field_user_name').is(":focus"))      setUserName();
+        }
     }
 
 });
@@ -116,8 +113,30 @@ function setUserName() {
         $('#field_message_input').focus();
         socket.emit('register', user_name);
 
+        $('#messaging_holder').css('zIndex',10);
     }
 
+}
+
+function printChatMessage(user,message, custom_color){
+    custom_color = custom_color || "#000";
+    $('.box_messages').append($('<div id="field_message" style="color:'+custom_color+'">').html(
+
+        "<div class='user'>"+user+"</div>"+
+        "<div class='message'>"+message+"</div>"
+
+    ));
+    $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+}
+function printMessage(message, custom_color){
+    custom_color = custom_color || "#000";
+    $('.box_messages').append($('<div id="field_message" style="color:'+custom_color+'">').html(message));
+    $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+}
+function printSysMessage(message,custom_color){
+    custom_color = custom_color || "#000";
+    $('.box_messages').append($('<div id="field_message" style="color:'+custom_color+'">').html(":: "+message));
+    $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
 }
 
 function sendMessage() {
@@ -125,8 +144,8 @@ function sendMessage() {
     var input = $('#field_message_input').val();
     $('#field_message_input').val('');
 
-    last_message = user_name + ": " + input;
-    socket.emit('chat_message', last_message);
+    last_message = input;
+    socket.emit('chat_message', {user:user_name,message:last_message});
 
 }
 
