@@ -17,7 +17,7 @@ socket.on('chat_message', function(msg) {
         msg_received.play();
         var msg_push = msg.message;
         msg_push = msg_push.split('<br/>').join('\n');
-        pushNotification("New Message", msg_push);
+        pushNotification(msg.user,msg_push);
 
     } else { msg_sent.play(); }
 
@@ -126,17 +126,27 @@ function printChatMessage(user,message, custom_color){
         "<div class='message'>"+message+"</div>"
 
     ));
-    $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+    // $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+    scrollDown();
 }
 function printMessage(message, custom_color){
     custom_color = custom_color || "#000";
     $('.box_messages').append($('<div id="field_message" style="color:'+custom_color+'">').html(message));
-    $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+    scrollDown();
+    // $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
 }
 function printSysMessage(message,custom_color){
     custom_color = custom_color || "#000";
     $('.box_messages').append($('<div id="field_message" style="color:'+custom_color+'">').html(":: "+message));
-    $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+    scrollDown();
+    // $('.box_messages').scrollTop($('.box_chat').prop("scrollHeight"));
+}
+
+function scrollDown(){
+    var scroller = $('.box_messages');
+    var height = scroller[0].scrollHeight - $(scroller).height();
+
+    $(scroller).stop().animate({ scrollTop: height }, "fast");
 }
 
 function sendMessage() {
