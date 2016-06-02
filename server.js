@@ -7,10 +7,10 @@ var http    = require("http").Server(app);
 var io      = require("socket.io")(http);
 var child_process = require('child_process');
 
+
 var connections = [];
 
 app.use(express.static('public'));
-
 app.get('/', function(req, res) {
 
     res.sendfile('index.html');
