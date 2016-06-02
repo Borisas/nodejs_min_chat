@@ -10,6 +10,11 @@ var msg_sent        = new Audio('send.mp3');
 
 // CLIENT
 
+if(navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+    msg_received = {play:function(){}};
+    msg_sent = {play:function(){}};
+}
+
 socket.on('chat_message', function(msg) {
 
     if (msg.user !== user_name) {
@@ -64,6 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function pushNotification(title, text) {
+
+    var ua = navigator.userAgent.toLowerCase();
+    var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+    if(isAndroid) {
+        return;
+    }
 
     if (!Notification) return;
 
