@@ -9,6 +9,7 @@ var express = require("express");
 var app     = express();
 var http    = require("http").Server(app);
 var io      = require("socket.io")(http);
+var child_process = require('child_process');
 
 var connections = [];
 
@@ -79,7 +80,20 @@ http.listen(3000, function() {
 
 });
 
+// -- -- -- -- --
+// CMD
+// -- -- -- -- --
 
+function execProgramSync(cmd){
+    return child_process.execSync(cmd).toString();
+}
+
+function encryptMessage(msg){
+    return execProgramSync('executables/encrypt '+msg);
+}
+function decryptMessage(msg){
+    return execProgramSync('executables/decrypt '+msg);
+}
 
 // -- -- -- -- --
 // MESSAGE PROCCESSING
@@ -162,6 +176,7 @@ function processMessage(msg) {
 		last_position = msg.length;
 
 	}
+
     message = message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
     return message;
 
