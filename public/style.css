@@ -1,0 +1,118 @@
+
+.box_active_users {
+
+    width:  25%;
+    height: 97.5%;
+
+    overflow:   visible;
+    overflow-y: scroll;
+    overflow-x: break-word;
+
+    position:   absolute;
+    left:       0px;
+    top:        0px;
+
+    border-right: 1px solid black;
+
+}
+
+.box_chat {
+
+    width:  70%;
+    height: 97.5%;
+
+    position:   absolute;
+    left:       27.5%;
+    top:        0px;
+
+}
+
+.box_messages {
+
+    width:  100%;
+    height: 87.5%;
+
+    overflow-y: scroll;
+
+}
+
+.box_message_padding {
+
+    width:  100%;
+    height: 2.5%;
+
+}
+
+.box_message_input {
+
+    width:  100%;
+    height: 10%;
+
+}
+
+.register_overlay {
+
+    width:  100%;
+    height: 100%;
+
+    z-index: 10;
+
+}
+
+.register_input {
+
+    width: 50%;
+
+    display:        block;
+    margin-left:    25%;
+    margin-right:   25%;
+
+    position:   relative;
+    top:        42.5%;
+
+    text-align: center;
+
+}
+
+#field_active_user {
+
+    width: 100%;
+
+    word-wrap:  break-word;;
+    font-size:  24px;
+    text-align: center;
+
+    border-bottom: 1px solid black;
+
+}
+
+#field_user_name {
+
+    width:      100%;
+
+    text-align: center;
+
+}
+
+#field_message {
+
+    width:  100%;
+
+    word-wrap:  break-word;
+    font-size:  16px;
+
+    border-bottom: 1px solid black;
+
+}
+
+#field_message_input {
+
+    width:  75%;
+    height: 75%;
+
+    font-size: 100%;
+
+    margin-left:    12.5%;
+    margin-right:   12.5%;
+
+}
