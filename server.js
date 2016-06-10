@@ -23,7 +23,12 @@ io.on('connection', function(socket) {
         console.log('message logging---');
         console.log(msg);
         console.log('------------------');
-        io.emit('chat_message', {user: msg.user, message:processMessage(msg.message)});
+
+        var parsed = processMessage(msg.message);
+
+        io.emit('chat_message', {user: msg.user, message:parsed});
+
+        console.log(encryptMessage(parsed));
 
     });
 
@@ -85,10 +90,10 @@ function execProgramSync(cmd){
 }
 
 function encryptMessage(msg){
-    return execProgramSync('executables/encrypt '+msg);
+    return execProgramSync('executables/encryption encrypt '+msg);
 }
 function decryptMessage(msg){
-    return execProgramSync('executables/decrypt '+msg);
+    return execProgramSync('executables/encryption decrypt '+msg);
 }
 
 // -- -- -- -- --
