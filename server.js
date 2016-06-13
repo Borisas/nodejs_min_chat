@@ -1,4 +1,4 @@
-//STABLE 1.1.1
+//STABLE 1.2.0
 
 
 var express = require("express");
@@ -28,7 +28,7 @@ io.on('connection', function(socket) {
 
         io.emit('chat_message', {user: msg.user, message:parsed});
 
-        console.log(encryptMessage(parsed));
+        // console.log(encryptMessage(parsed));
 
     });
 
