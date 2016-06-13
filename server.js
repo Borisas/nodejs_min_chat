@@ -179,6 +179,7 @@ function processMessage(msg) {
 	}
 
     message = message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+    message = message.replace(/\u003c/g, "&lt;").replace(/\u003e/g, "&gt;");
     return message;
 
 }
