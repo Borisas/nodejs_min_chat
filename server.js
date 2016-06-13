@@ -177,9 +177,8 @@ function processMessage(msg) {
 		last_position = msg.length;
 
 	}
-
-    message = message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
     message = message.replace(/\u003c/g, "&lt;").replace(/\u003e/g, "&gt;");
+    message = message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
     return message;
 
 }
