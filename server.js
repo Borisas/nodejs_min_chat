@@ -108,6 +108,8 @@ function processMessage(msg) {
 	var timeout        = 0;
 	var message        = msg;
 
+    message = message.replace(/\u003c/g, "&lt;").replace(/\u003e/g, "&gt;");
+    
     // msg = msg.replace(/(?:\r\n|\r|\n)/g, '<br />');
 	while (last_position < msg.length) {
 
@@ -177,7 +179,7 @@ function processMessage(msg) {
 		last_position = msg.length;
 
 	}
-    message = message.replace(/\u003c/g, "&lt;").replace(/\u003e/g, "&gt;");
+
     message = message.replace(/(?:\r\n|\r|\n)/g, '<br/>');
     return message;
 
